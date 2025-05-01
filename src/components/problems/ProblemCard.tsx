@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { ChevronDown, ChevronUp, Check, Code, Lightbulb, RefreshCcw } from 'lucide-react';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/components/ui/use-toast';
 
 interface ProblemCardProps {
   problem: {
@@ -34,7 +33,8 @@ const ProblemCard = ({ problem, onSubmit }: ProblemCardProps) => {
 
   const handleSubmit = () => {
     if (!solution.trim()) {
-      toast("Please enter your solution", {
+      toast({
+        title: "Please enter your solution",
         description: "You need to write some code before submitting."
       });
       return;
@@ -45,7 +45,8 @@ const ProblemCard = ({ problem, onSubmit }: ProblemCardProps) => {
     // Simulate submission
     setTimeout(() => {
       onSubmit?.(solution);
-      toast("Solution submitted!", {
+      toast({
+        title: "Solution submitted!",
         description: "Your solution has been submitted for evaluation.",
       });
       setIsSubmitting(false);
@@ -54,7 +55,8 @@ const ProblemCard = ({ problem, onSubmit }: ProblemCardProps) => {
 
   const handleReset = () => {
     setSolution('');
-    toast("Solution cleared", {
+    toast({
+      title: "Solution cleared",
       description: "Your solution has been reset."
     });
   };
