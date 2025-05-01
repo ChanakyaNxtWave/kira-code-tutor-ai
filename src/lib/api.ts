@@ -1,7 +1,7 @@
-
 import { toast } from '@/components/ui/use-toast';
 
-const API_URL = process.env.API_URL || 'http://localhost:5000/api';
+// In a browser environment, process.env is not available, so we need to use import.meta.env instead
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Error handling wrapper
 const handleApiError = (error: any) => {
