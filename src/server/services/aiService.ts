@@ -1,11 +1,11 @@
 
-// Mock service for AI tutor responses
+// AI tutor service for generating responses to user queries
 export const generateTutorResponse = async (
   message: string, 
   userContext: any, 
   conversationHistory: any[]
 ): Promise<string> => {
-  // For now, we'll return mock responses based on basic pattern matching
+  // For now, we'll return responses based on pattern matching
   const lowerMessage = message.toLowerCase();
   
   if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
