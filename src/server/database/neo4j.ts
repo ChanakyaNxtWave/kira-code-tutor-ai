@@ -1,5 +1,9 @@
 
 import neo4j, { Driver, Session } from 'neo4j-driver';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 let driver: Driver;
 
@@ -9,6 +13,7 @@ export const connectToNeo4j = async (): Promise<void> => {
   const password = process.env.NEO4J_PASSWORD || 'password';
 
   try {
+    console.log(`Connecting to Neo4j at ${uri}`);
     driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
     
     // Verify connectivity
@@ -59,6 +64,7 @@ const initializeDatabase = async (): Promise<void> => {
     const count = result.records[0].get('count').toNumber();
     
     if (count === 0) {
+      console.log('Seeding database with initial data');
       // Seed problems
       await session.run(`
         CREATE (p1:Problem {
@@ -94,6 +100,8 @@ const initializeDatabase = async (): Promise<void> => {
         CREATE (p3)-[:USES]->(c3)
       `);
       console.log('Database seeded with initial data');
+    } else {
+      console.log(`Database already has ${count} problems, skipping seed`);
     }
   } catch (error) {
     console.error('Error initializing database:', error);

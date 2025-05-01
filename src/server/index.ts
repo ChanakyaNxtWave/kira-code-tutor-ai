@@ -2,10 +2,14 @@
 import express from 'express';
 import cors from 'cors';
 import { json } from 'body-parser';
+import dotenv from 'dotenv';
 import problemRoutes from './routes/problems';
 import userRoutes from './routes/users';
 import tutorRoutes from './routes/tutor';
 import { connectToNeo4j } from './database/neo4j';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

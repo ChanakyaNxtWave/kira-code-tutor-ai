@@ -1,53 +1,29 @@
 
-import OpenAI from 'openai';
-
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'your-api-key',
-});
-
-interface UserContext {
-  attemptedProblems: any[];
-  unattemptedProblems: any[];
-}
-
-interface ConversationMessage {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
+// Mock service for AI tutor responses
 export const generateTutorResponse = async (
-  message: string,
-  userContext: UserContext,
-  conversationHistory: ConversationMessage[] = []
+  message: string, 
+  userContext: any, 
+  conversationHistory: any[]
 ): Promise<string> => {
-  try {
-    // Add system prompt to guide the AI tutor
-    const systemPrompt = `You are an AI tutor specialized in data structures and algorithms. 
-    You help students learn DSA concepts and solve coding problems.
-    The student has attempted these problems: ${JSON.stringify(userContext.attemptedProblems.map(p => p.name))}.
-    Problems they haven't tried yet: ${JSON.stringify(userContext.unattemptedProblems.map(p => p.name))}.`;
-    
-    // Build conversation context
-    let messages = [
-      { role: 'system', content: systemPrompt },
-      ...conversationHistory,
-      { role: 'user', content: message }
-    ];
-    
-    // Call OpenAI API with the latest SDK format
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: messages.map(m => ({ role: m.role as any, content: m.content })),
-      temperature: 0.7,
-      max_tokens: 1000
-    });
-    
-    return completion.choices[0].message.content || 'I apologize, but I couldn\'t generate a response.';
-  } catch (error: any) {
-    console.error('Error generating AI response:', error);
-    
-    // Fallback response if API call fails
-    return "I apologize, but I'm having trouble connecting to my knowledge base right now. Please try again in a moment.";
+  // For now, we'll return mock responses based on basic pattern matching
+  const lowerMessage = message.toLowerCase();
+  
+  if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+    return "Hello! I'm your coding tutor. How can I help you learn to code today?";
   }
+  
+  if (lowerMessage.includes('array')) {
+    return "Arrays are fundamental data structures that store elements of the same type in contiguous memory locations. Some key operations to know are: accessing elements (O(1)), searching (O(n)), insertion (O(n)), and deletion (O(n)). What would you like to know about arrays?";
+  }
+  
+  if (lowerMessage.includes('linked list')) {
+    return "Linked Lists consist of nodes where each node contains data and a reference to the next node. Unlike arrays, elements aren't stored in contiguous memory locations. The key operations are: accessing elements (O(n)), insertion (O(1) if we have a reference to the node), and deletion (O(1) with a reference).";
+  }
+  
+  if (lowerMessage.includes('stack')) {
+    return "Stacks follow the Last In First Out (LIFO) principle. Think of a stack of plates - you can only take the top plate. The main operations are push (add to top), pop (remove from top), and peek (view top without removing).";
+  }
+  
+  // Default response
+  return "That's a great question about coding! To give you the best guidance, could you provide more details about what specific concept or problem you're working on?";
 };
