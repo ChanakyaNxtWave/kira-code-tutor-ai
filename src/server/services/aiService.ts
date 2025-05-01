@@ -1,11 +1,10 @@
 
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
-// Initialize OpenAI or use another AI service like Anthropic
-const configuration = new Configuration({
+// Initialize OpenAI client
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'your-api-key',
 });
-const openai = new OpenAIApi(configuration);
 
 interface UserContext {
   attemptedProblems: any[];
@@ -30,21 +29,21 @@ export const generateTutorResponse = async (
     Problems they haven't tried yet: ${JSON.stringify(userContext.unattemptedProblems.map(p => p.name))}.`;
     
     // Build conversation context
-    let messages: ConversationMessage[] = [
+    let messages = [
       { role: 'system', content: systemPrompt },
       ...conversationHistory,
       { role: 'user', content: message }
     ];
     
-    // Call OpenAI API
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-4-turbo',
-      messages: messages.map(m => ({ role: m.role, content: m.content })),
+    // Call OpenAI API with the latest SDK format
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: messages.map(m => ({ role: m.role as any, content: m.content })),
       temperature: 0.7,
       max_tokens: 1000
     });
     
-    return completion.data.choices[0].message?.content || 'I apologize, but I couldn\'t generate a response.';
+    return completion.choices[0].message.content || 'I apologize, but I couldn\'t generate a response.';
   } catch (error: any) {
     console.error('Error generating AI response:', error);
     
