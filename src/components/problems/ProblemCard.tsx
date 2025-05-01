@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { ChevronDown, ChevronUp, Check, Code, Lightbulb, RefreshCcw } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import { submitSolution } from '@/lib/api';
 
 interface ProblemCardProps {
   problem: {
@@ -31,7 +33,7 @@ const ProblemCard = ({ problem, onSubmit }: ProblemCardProps) => {
   const [solution, setSolution] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!solution.trim()) {
       toast({
         title: "Please enter your solution",
@@ -42,15 +44,31 @@ const ProblemCard = ({ problem, onSubmit }: ProblemCardProps) => {
 
     setIsSubmitting(true);
     
-    // Simulate submission
-    setTimeout(() => {
-      onSubmit?.(solution);
+    try {
+      // For now, we'll use a mock user ID
+      // In a real app, this would come from authentication
+      const userId = 'current-user-id';
+      
+      // Submit solution to API
+      await submitSolution(problem.id, userId, solution);
+      
       toast({
         title: "Solution submitted!",
         description: "Your solution has been submitted for evaluation.",
       });
+      
+      // Call the onSubmit callback if provided
+      onSubmit?.(solution);
+    } catch (error) {
+      console.error('Error submitting solution:', error);
+      toast({
+        title: "Submission failed",
+        description: "There was an error submitting your solution. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const handleReset = () => {
