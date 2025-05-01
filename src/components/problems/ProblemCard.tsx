@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { ChevronDown, ChevronUp, Check, Code, Lightbulb, RefreshCcw } from 'lucide-react';
-import { toast } from '@/components/ui/use-sonner';
+import { toast } from '@/components/ui/sonner';
 
 interface ProblemCardProps {
   problem: {

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import TutorChat from '@/components/ai/TutorChat';
 import ConceptMap from '@/components/knowledge/ConceptMap';
 import ProgressChart from '@/components/dashboard/ProgressChart';
 import ProblemCard from '@/components/problems/ProblemCard';
-import { MessageCircle, Network, BarChart2, BookOpen, Code } from 'lucide-react';
+import { MessageCircle, Network, BarChart2, BookOpen, Code, Check } from 'lucide-react';
 
 // Mock problems data - in a real app, this would come from the Neo4j database
 const recommendedProblems = [
